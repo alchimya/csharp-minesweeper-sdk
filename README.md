@@ -128,3 +128,76 @@ public int maxMines { get; protected set; }
 public List<MinesweeperItem> items { get; protected set; }	
 ```
 <b>Methods:</b>
+```cs
+//With this method you can implement all the game behavior 
+//If the item will be a mine,then will be raised a game over event 
+//and all cells will be opened, otherwise it will find all the item's adjacent cells
+public void evaluateItem(MinesweeperItem item)
+
+//it allows to make the game grid and it, automatically and randomly, will place the mines
+public void makeGrid()	
+
+//This method is useful when we are in a "game over" mode it will "open" 
+//all cells with a proper value (empty, mine number warning, mine)
+public void openAllBlocks()	
+
+//With this method you can discover
+//a) how many adjacent mines are around the input method item
+//b) how many adjacent empty cells are around the input method item
+public void setAdjacentCells(MinesweeperItem item)
+
+//Allows to find an item by cell coordinates (row and col)
+public MinesweeperItem findItemAt(MinesweeperItemCellDefinition cell)	
+```
+
+# Event System
+MinesweeperGrid works around a sort of messaging system implemented with a series of events exposed by the class.
+<br/>
+MinesweeperGrid exposes the following events defined by delegates methods:
+<b>itemAdded</b>
+<br>
+this event will be raised when a new item (cell) will be added.
+```cs
+public event MinesweeperItemAdded itemAdded;
+public delegate void MinesweeperItemAdded(MinesweeperItem item);
+```
+
+<b>itemMineAdded</b>
+<br>
+this event will be raised when a "mine" item will be added. 
+```cs
+public event MinesweeperItemMineAdded itemMineAdded;
+public delegate void MinesweeperItemMineAdded(MinesweeperItem item);
+```
+
+<b>loadingCompleted</b>
+<br>
+this event will be raised when the grid game will be completely loaded. 
+```cs
+public event MinesweeperLoadingCompleted loadingCompleted;
+public delegate void MinesweeperLoadingCompleted(List<MinesweeperItem> items);
+```
+
+<b>cellOpeningCompleted</b>
+<br>
+this event will be raised when a new item will be open as empty or mine cell. 
+```cs
+public event MinesweeperCellOpeningCompleted cellOpeningCompleted;
+public delegate void MinesweeperCellOpeningCompleted(MinesweeperItem item);
+```
+
+<b>gameOver</b>
+<br>
+this event will be raised when item is a mine. 
+```cs
+public event MinesweeperGameOver gameOver;
+public delegate void MinesweeperGameOver(MinesweeperItem item);
+```
+
+<b>errorOccurred</b>
+<br>
+this event will be raised when an error occurs 
+```cs
+public event MinesweeperError errorOccurred;
+public delegate void MinesweeperError(Exception ex);
+```
