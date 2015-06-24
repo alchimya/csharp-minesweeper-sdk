@@ -44,7 +44,7 @@ If we consider a 4x4 grid (matrix) a cell C defined by a X,Y coordinates it will
 In other words we can find the adjacent cells of an item by translating a point on the x and y axis.
 
 # SDK Classes
-- MinesweeperItemCellDefinition
+- <b>MinesweeperItemCellDefinition</b>
 It represents a cell, defined by a pair (int) values that indentify row and colum.
 <br/>
 To create a new instance is required to pass row and col as parameters of the constructor:
@@ -52,7 +52,7 @@ To create a new instance is required to pass row and col as parameters of the co
 public MinesweeperItemCellDefinition(int row, int col)
 ```
 
-- MinesweeperItem
+- <b>MinesweeperItem</b>
 It represents the "atomic" element of the grid game.
 <br/>
 To create a new instance is required to pass a MinesweeperItemCellDefinition instance as parameter of the constructor.
@@ -86,7 +86,7 @@ public Object value { get; set;}
 public MinesweeperItemCellDefinition cell { get; protected set;}	
 ```
 
-- MinesweeperMineGenerator
+- <b>MinesweeperMineGenerator</b>
 This is an helper class and it helps us to generate a random number between 1 and number of cells (generally rows*cols or however a total elements of a matrix).
 <br/>
 How to use:
@@ -100,7 +100,7 @@ public MinesweeperMineGenerator(int cells)
 public int make()
 ```
 
-- MinesweeperGrid
+- <b>MinesweeperGrid</b>
 This class represents the core of the SDK an it allows to make a grid game system with rows*cols items, and it helps, automatically, to define and dispose, randomly, mines on the grid.
 <br/>
 To create a new instance you can use two constructors:
