@@ -201,3 +201,128 @@ this event will be raised when an error occurs
 public event MinesweeperError errorOccurred;
 public delegate void MinesweeperError(Exception ex);
 ```
+
+# How to use
+This SDK can be implemented as class set of a .NET project in different kind of solutions.
+<br/>
+To implement the game, we suppose that you will make a grid system with some "clickabale" UI elements such as a Button.
+<br/>
+However, to simplify the SDK comprehension,  in this example we will talk about a Button of a WPF project (included as part of this SDK: see MinesweeperSDK_WPF project) and will make a buttons grid with an UniformGrid.
+<br>
+To implement the game you have to follow these step:
+
+- <b>Declare a MinesweeperGrid  variable and Create an instance by using a proper constructor:</b>
+```cs
+private MinesweeperGrid gameGrid;
+....
+....
+....
+//we will create a grid 9x9 with 12 mines
+gameGrid = new MinesweeperGrid(9, 9,12);
+```
+- <b>Implement the event handler for the MinesweeperGrid   instance, at least for:</b>
+```cs
+public event MinesweeperCellOpeningCompleted cellOpeningCompleted;
+public delegate void MinesweeperCellOpeningCompleted(MinesweeperItem item);
+
+public event MinesweeperLoadingCompleted loadingCompleted;
+public delegate void MinesweeperLoadingCompleted(List<MinesweeperItem> items);
+public event MinesweeperError errorOccurred;
+public delegate void MinesweeperError(Exception ex);
+
+public event MinesweeperGameOver gameOver;
+public delegate void MinesweeperGameOver(MinesweeperItem item);
+```
+example:
+```cs
+gameGrid.loadingCompleted+=gameGrid_loadingCompleted;
+gameGrid.errorOccurred+=gameGrid_errorOccurred;
+gameGrid.cellOpeningCompleted+=gameGrid_cellOpeningCompleted;
+gameGrid.gameOver +=gameGrid_gameOver;
+```
+- <b>Call the makeGrid method</b>
+```cs
+gameGrid.makeGrid();
+```
+- <b>When the loadingCompleted event will be raised, you can load your grid by using the items grid:</b>
+```cs
+private void gameGrid_loadingCompleted(List<MinesweeperItem> items){
+	//this event will be raised from the makeGrid method
+	makeButtonsGrid();
+}
+private void makeButtonsGrid() {
+	//for each grid item add a button on panel form 
+	List<MinesweeperItem> items= gameGrid.items;
+	gamePanel.Columns = gameGrid.cols;
+	gamePanel.Children.Clear();
+	foreach (MinesweeperItem item in items){
+		gamePanel.Children.Add(getGridButton(item));
+	}
+}
+
+private Button getGridButton(MinesweeperItem item){
+	//creates a button
+	Button button = new Button();
+	//stores the button on the item tag
+	item.tag = button;
+	//stores the item on the tag button 
+	button.Tag = item;
+	button.Content = ".";
+	button.Width = 35;
+	button.Height = 35;
+	button.Click += gridButton_Click;
+	return button;
+}
+```
+
+- <b>When an UI element will be clicked, you have just to call the evaluateItem method as follow:</b>
+```cs
+private void gridButton_Click(object sender, RoutedEventArgs e){
+            Button button = (Button)sender;
+            MinesweeperItem item = (MinesweeperItem)button.Tag;
+            gameGrid.evaluateItem(item);
+}
+```
+
+- <b>Implement the presentation behavior of each UI element, within the cellOpeningCompleted and gameOver events</b>
+```cs
+private void gameGrid_gameOver(MinesweeperItem item) {
+	MessageBox.Show(
+			"Oh no!\nI'm a mine :(", "GAME OVER", 
+			MessageBoxButton.OK, 
+			MessageBoxImage.Warning
+			);
+}
+
+private void gameGrid_cellOpeningCompleted(MinesweeperItem item){
+        //gets the button from the item tag (see getGridButton method)
+        Button button = (Button)item.tag;
+        switch (item.type) { 
+        	case MinesweeperItemType.MinesweeperItem_Empty:
+        		button.Content = "";
+                    break;
+        	case MinesweeperItemType.MinesweeperItem_Mine:
+                    button.Content = "*";
+                    break;
+        	case MinesweeperItemType.MinesweeperItem_MineWarning:
+                    button.Content = item.value.ToString();
+                    break;
+        	case MinesweeperItemType.MinesweeperItemType_None:
+                    break;
+            }
+        
+            //if items is opened, remove the click event handler from the button
+            if (item.type != MinesweeperItemType.MinesweeperItemType_None) {
+                button.Click -= gridButton_Click;
+            }
+}
+```
+
+# Tests
+Within the .NET solution, there is a Test project, that implement some basic (stupid!) Unit Test on the MinesweeperGrid. 
+<br/>
+Obviously tests could be developed much better, but at this stage and for this purpose they give an idea of how the project could be evolved.
+<br/>
+All the unit tests are developed by using NUnit Framework.
+
+Enjoy ;-)
