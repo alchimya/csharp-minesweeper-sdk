@@ -2,7 +2,7 @@
 A class set to solve the logic of the famous game Minesweeper :)
 
 # What is this?
-Did you even play to Minesweeper?
+Did you ever play to Minesweeper?
 <br/>
 Wtih this project I solved the logic of this game by developing a class set.
 <br/>
@@ -69,6 +69,7 @@ public enum MinesweeperItemType{
         MinesweeperItem_Mine = 3
     }
 ```
+<br/>
 Each item can be defined as
 - Mine
 - Warning Mines Indicator
