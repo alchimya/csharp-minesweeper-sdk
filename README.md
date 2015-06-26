@@ -67,7 +67,7 @@ public enum MinesweeperItemType{
         MinesweeperItem_Empty = 1,
         MinesweeperItem_MineWarning = 2,
         MinesweeperItem_Mine = 3
-    }
+}
 ```
 <br/>
 Each item can be defined as
