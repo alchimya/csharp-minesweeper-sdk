@@ -72,7 +72,7 @@ public enum MinesweeperItemType{
 <br/>
 Each item can be defined as
 - Mine
-- Warning Mines Indicator
+- Warning mines Indicator
 - Empty cell
 - None (default)
 MinesweeperItem has the following attributes:
